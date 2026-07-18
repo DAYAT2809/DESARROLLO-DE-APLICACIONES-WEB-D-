@@ -1,66 +1,283 @@
+// ===============================
+// ELEMENTOS DEL DOM
+// ===============================
+
 const formulario = document.getElementById("formProducto");
 
 const nombre = document.getElementById("nombre");
 const descripcion = document.getElementById("descripcion");
 const categoria = document.getElementById("categoria");
 
-const lista = document.getElementById("listaProductos");
 const mensaje = document.getElementById("mensaje");
 const total = document.getElementById("total");
+const spinner = document.getElementById("spinner");
 
-let contador = 0;
 
-formulario.addEventListener("submit", function(e){
+// ===============================
+// MODAL PRODUCTO REGISTRADO
+// ===============================
 
-    e.preventDefault();
+const modal = new bootstrap.Modal(
+    document.getElementById("modalRegistro")
+);
 
-    if(nombre.value.trim()==="" ||
-       descripcion.value.trim()==="" ||
-       categoria.value.trim()===""){
 
-        mensaje.innerHTML =
-        "<div class='alert alert-danger'>Todos los campos son obligatorios.</div>";
+// ===============================
+// ARREGLO DE PRODUCTOS
+// ===============================
 
-        return;
+let productos = [
+
+    {
+        nombre: "Vestidos de Moda",
+        descripcion: "Diseños modernos inspirados en las últimas tendencias.",
+        categoria: "Ropa"
+    },
+
+    {
+        nombre: "Maquillaje",
+        descripcion: "Productos ideales para uso diario y ocasiones especiales.",
+        categoria: "Maquillaje"
+    },
+
+    {
+        nombre: "Accesorios",
+        descripcion: "Complementos para destacar tu estilo personal.",
+        categoria: "Accesorios"
     }
 
-    mensaje.innerHTML =
-    "<div class='alert alert-success'>Producto agregado correctamente.</div>";
+];
 
-    const tarjeta = document.createElement("div");
 
-    tarjeta.className = "card p-3 mt-3";
+// ===============================
+// MOSTRAR PRODUCTOS DINÁMICAMENTE
+// ===============================
 
-    tarjeta.innerHTML = `
-        <h5>${nombre.value}</h5>
+function mostrarProductos(){
 
-        <p>${descripcion.value}</p>
+    const contenedor = document.getElementById("contenedorProductos");
 
-        <span class="badge bg-primary">${categoria.value}</span>
+    contenedor.innerHTML = "";
 
-        <br><br>
 
-        <button class="btn btn-danger eliminar">
-            Eliminar
-        </button>
-    `;
+    if(productos.length === 0){
 
-    lista.appendChild(tarjeta);
+        contenedor.innerHTML = `
 
-    contador++;
+        <div class="col-12">
 
-    total.textContent = contador;
+            <div class="alert alert-warning">
 
-    tarjeta.querySelector(".eliminar").addEventListener("click", function(){
+                No existen productos registrados.
 
-        tarjeta.remove();
+            </div>
 
-        contador--;
+        </div>
 
-        total.textContent = contador;
+        `;
+
+        total.textContent = 0;
+
+        return;
+
+    }
+
+
+    productos.forEach(producto => {
+
+
+        contenedor.innerHTML += `
+
+        <div class="col-lg-4 col-md-6 mb-4">
+
+
+            <div class="card h-100 shadow">
+
+
+                <div class="card-body">
+
+
+                    <h5 class="card-title">
+
+                        ${producto.nombre}
+
+                    </h5>
+
+
+                    <p class="card-text">
+
+                        ${producto.descripcion}
+
+                    </p>
+
+
+                    <span class="badge bg-primary">
+
+                        ${producto.categoria}
+
+                    </span>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+        `;
+
 
     });
 
-    formulario.reset();
+
+    total.textContent = productos.length;
+
+
+}
+
+
+// Mostrar productos al cargar la página
+
+mostrarProductos();
+
+
+
+// ===============================
+// REGISTRAR PRODUCTO
+// ===============================
+
+formulario.addEventListener("submit", function(e){
+
+
+    e.preventDefault();
+
+
+
+    // Ocultar mensaje anterior
+
+    mensaje.classList.add("d-none");
+
+
+
+    // VALIDACIÓN
+
+    if(
+
+        nombre.value.trim() === "" ||
+
+        descripcion.value.trim() === "" ||
+
+        categoria.value === ""
+
+    ){
+
+
+        mensaje.className = "alert alert-danger mt-3";
+
+        mensaje.textContent =
+        "Todos los campos son obligatorios.";
+
+
+        mensaje.classList.remove("d-none");
+
+
+        return;
+
+
+    }
+
+
+
+
+    // Mostrar spinner
+
+    spinner.classList.remove("d-none");
+
+
+
+
+    // Simulación de carga
+
+    setTimeout(function(){
+
+
+
+        spinner.classList.add("d-none");
+
+
+
+        // Crear producto nuevo
+
+        let nuevoProducto = {
+
+
+            nombre: nombre.value,
+
+            descripcion: descripcion.value,
+
+            categoria: categoria.value
+
+
+        };
+
+
+
+        // Agregar al arreglo
+
+        productos.push(nuevoProducto);
+
+
+
+        // Actualizar tarjetas
+
+        mostrarProductos();
+
+
+
+
+        // Mostrar alerta
+
+        mensaje.className = "alert alert-success mt-3";
+
+        mensaje.textContent =
+        "Producto agregado correctamente.";
+
+
+        mensaje.classList.remove("d-none");
+
+
+
+
+        // Mostrar modal
+
+        modal.show();
+
+
+
+
+        // Limpiar formulario
+
+        formulario.reset();
+
+
+
+
+        // Ocultar alerta después de 3 segundos
+
+        setTimeout(function(){
+
+
+            mensaje.classList.add("d-none");
+
+
+        },3000);
+
+
+
+    },2000);
+
+
 
 });

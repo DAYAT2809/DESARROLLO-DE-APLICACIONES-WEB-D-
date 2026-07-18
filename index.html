@@ -12,10 +12,15 @@
 
 </head>
 
+<!-- ========================================= -->
+<!-- FUTURA PLANTILLA base.html (Flask) -->
+<!-- Contendrá Header + Navbar + Main + Footer -->
+<!-- ========================================= -->
 <body>
 
-    <!-- HEADER -->
+    <!-- FUTURA PLANTILLA: header.html -->
     <header>
+        <!-- FUTURA PLANTILLA: navbar.html -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="#">Girls</a>
@@ -46,20 +51,36 @@
         </nav>
     </header>
 
+    <!-- CONTENIDO DINÁMICO -->
+    <!-- FUTURA PLANTILLA: contenido.html -->
     <main>
 
         <!-- INICIO -->
         <section id="inicio" class="hero">
-            <h1>Bienvenidos a Girls</h1>
 
-            <p>
-                Tienda de ropa y maquillaje inspirada en las tendencias más populares de TikTok.
-            </p>
+    <h1>Bienvenidos a Girls</h1>
 
-            <a href="#productos" class="btn btn-light btn-lg">
-                Ver Productos
-            </a>
-        </section>
+    <p>
+        Tienda de ropa y maquillaje inspirada en las tendencias más populares de TikTok.
+    </p>
+
+    <!-- Botón para ir a Productos -->
+    <a href="#productos" class="btn btn-light btn-lg me-2">
+        Ver Productos
+    </a>
+
+    <!-- Botón para abrir el Modal -->
+    <button
+        type="button"
+        class="btn btn-warning btn-lg"
+        data-bs-toggle="modal"
+        data-bs-target="#modalProducto">
+
+        Conocer más
+
+    </button>
+
+</section>
 
         <!-- QUIÉNES SOMOS -->
         <section id="quienes" class="container my-5">
@@ -83,35 +104,15 @@
         </section>
 
         <!-- PRODUCTOS -->
-        <section id="productos" class="container my-5">
+    <section id="productos" class="container my-5">
 
-            <h2 class="text-center mb-4">Nuestros Productos</h2>
+    <h2 class="text-center mb-4">
+        Nuestros Productos
+    </h2>
 
-            <div class="row">
-
-                <div class="col-md-4 mb-3">
-                    <div class="card p-3">
-                        <h4>Vestidos de Moda</h4>
-                        <p>Diseños modernos inspirados en las últimas tendencias.</p>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <div class="card p-3">
-                        <h4>Maquillaje</h4>
-                        <p>Productos ideales para uso diario y ocasiones especiales.</p>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <div class="card p-3">
-                        <h4>Accesorios</h4>
-                        <p>Complementos para destacar tu estilo personal.</p>
-                    </div>
-                </div>
-
-            </div>
-
+    <div id="contenedorProductos" class="row">
+        <!-- Los productos se mostrarán aquí desde JavaScript -->
+    </div>
         </section>
 
 <section class="container my-5">
@@ -122,49 +123,106 @@
 
     <form id="formProducto">
 
+    <div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+Nombre del producto
+    </label>
+
         <input
             type="text"
             id="nombre"
             class="form-control"
             placeholder="Nombre del producto">
 
-        <div id="errorNombre" class="mb-3"></div>
+        <div id="errorNombre"></div>
 
-        <textarea
-            id="descripcion"
-            class="form-control"
-            rows="3"
-            placeholder="Descripción"></textarea>
+        </div>
 
-        <div id="errorDescripcion" class="mb-3"></div>
+        <div class="col-md-6 mb-3">
 
+        <label class="form-label">
+Categoría
+</label>
+          
         <select
-            id="categoria"
-            class="form-select">
+id="categoria"
+class="form-select">
 
-            <option value="">Seleccione una categoría</option>
-            <option>Ropa</option>
-            <option>Maquillaje</option>
-            <option>Accesorios</option>
+<option value="">Seleccione una categoría</option>
 
-        </select>
+<option>Ropa</option>
 
-        <div id="errorCategoria" class="mb-3"></div>
+<option>Maquillaje</option>
 
-        <button type="submit" class="btn btn-success mt-3">
-    Agregar Producto
+<option>Accesorios</option>
+
+</select>
+<div id="errorCategoria"></div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Descripción
+
+</label>
+
+<textarea
+
+id="descripcion"
+
+class="form-control"
+
+rows="4"
+
+placeholder="Descripción">
+
+</textarea>
+
+<div id="errorDescripcion"></div>
+
+</div>
+
+<button
+type="submit"
+class="btn btn-success">
+
+Agregar Producto
+
 </button>
 
-    </form>
+</form>
 
-    <div id="mensaje" class="mt-3"></div>
+
+<div
+    id="mensaje"
+    class="alert alert-success mt-3 d-none">
+    Producto agregado correctamente.
+</div>
+
+<div
+    id="spinner"
+    class="text-center mt-3 d-none">
+
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+
+    <p class="mt-2">Cargando...</p>
+
+</div>
 
     <h4 class="mt-3">
         Productos registrados:
         <span id="total">0</span>
     </h4>
-
-    <div id="listaProductos"></div>
 
 </section>
         
@@ -238,11 +296,111 @@
 
     </main>
 
-    <!-- FOOTER -->
-    <footer>
-        <p>Dayo - Desarrollo de Aplicaciones Web - 2026</p>
-    </footer>
+    <!-- FUTURA PLANTILLA: footer.html -->
+    
+    <!-- MODAL BOOTSTRAP -->
+<div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
+        <div class="modal-header">
+    
+            <h5 class="modal-title" id="modalProductoLabel">
+                Bienvenido a Girls
+            </h5>
+
+    <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Cerrar">
+    </button>
+
+</div>
+
+
+<div class="modal-body">
+
+    <p>
+        <strong>Girls Boutique</strong> es una tienda de ropa, maquillaje y accesorios inspirados en las últimas tendencias de TikTok.
+    </p>
+    <p>
+        Ofrecemos productos modernos, de calidad y a precios accesibles para que nuestros clientes expresen su estilo con confianza.
+    </p>
+</div>
+            <div class="modal-footer">
+                
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal">
+                    Aceptar
+                
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- SEGUNDO MODAL: PRODUCTO REGISTRADO -->
+
+<div class="modal fade" id="modalRegistro" tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Producto registrado
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                El producto fue agregado correctamente.
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    data-bs-dismiss="modal">
+
+                    Aceptar
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+    
+<footer class="bg-dark text-white text-center py-3 mt-5">
+
+    <p class="mb-0">
+        Dayo - Desarrollo de Aplicaciones Web - 2026
+    </p>
+
+</footer>
     <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

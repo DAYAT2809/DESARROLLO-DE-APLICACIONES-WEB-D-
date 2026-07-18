@@ -1,72 +1,149 @@
 body{
-    background-color: #ffe6f2;
-    font-family: Arial, sans-serif;
+    background-color:#ffe6f2;
+    font-family:Arial, Helvetica, sans-serif;
 }
+
+/* HERO */
 
 .hero{
-    background: linear-gradient(135deg, #ffb6c1, #c44a87);
-    color: white;
-    text-align: center;
-    padding: 80px 20px;
+    background:linear-gradient(135deg,#ffb6c1,#c44a87);
+    color:white;
+    text-align:center;
+    padding:100px 20px;
 }
 
+.hero h1{
+    font-size:3rem;
+    font-weight:bold;
+}
+
+.hero p{
+    font-size:1.2rem;
+    margin:20px 0;
+}
+
+/* NAVBAR */
+
+.navbar-brand{
+    font-weight:bold;
+    font-size:1.5rem;
+}
+
+/* TITULOS */
+
+h2{
+    color:#c44a87;
+    font-weight:bold;
+}
+
+/* CARDS */
+
 .card{
-    border: none;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-    border-radius: 12px;
+    border:none;
+    border-radius:15px;
+    transition:0.3s;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
 }
 
 .card:hover{
-    transform: translateY(-5px);
+    transform:translateY(-8px);
 }
 
-.card h4{
-    color: #c44a87;
-    font-weight: bold;
+.card-title{
+    color:#c44a87;
+    font-weight:bold;
 }
+
+/* FORMULARIO */
+
+form{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+.form-control,
+.form-select{
+    border-radius:10px;
+}
+
+.btn{
+    border-radius:10px;
+}
+
+/* BADGES */
 
 .badge{
-    font-size: 0.9rem;
+    font-size:.9rem;
 }
+
+/* ALERTA */
+
+.alert{
+    border-radius:10px;
+}
+
+/* SPINNER */
+
+#spinner{
+    margin-top:20px;
+}
+
+/* ASIDE */
 
 aside{
-    background-color: #ffd1dc;
-    border-radius: 10px;
-    padding: 20px;
+    background:#ffd1dc;
+    border-radius:15px;
+    padding:25px;
 }
+
+/* FOOTER */
 
 footer{
-    background-color: #c44a87;
-    color: white;
-    text-align: center;
-    padding: 15px;
+    background:#c44a87;
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
 }
 
+footer p{
+    margin:0;
+}
+
+/* VALIDACIONES */
+
 .is-valid{
-    border:2px solid rgb(128, 0, 66);
+    border:2px solid #8a0a5a;
 }
 
 .is-invalid{
     border:2px solid red;
 }
 
-.alert{
-    margin-top:5px;
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+.hero{
+    padding:70px 20px;
 }
 
-@media (max-width:768px){
+.hero h1{
+    font-size:2rem;
+}
 
-    .hero{
-        padding:60px 15px;
-    }
+.hero p{
+    font-size:1rem;
+}
 
-    .hero h1{
-        font-size:2rem;
-    }
+.card{
+    margin-bottom:20px;
+}
 
-    .card{
-        margin-bottom:20px;
-    }
+form{
+    padding:20px;
+}
 
 }
