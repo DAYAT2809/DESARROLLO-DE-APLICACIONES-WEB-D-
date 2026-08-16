@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Girls - Facturación{% endblock %}
+
+{% block content %}
+
+<section class="container my-5">
+
+    <h1 class="text-center mb-4" style="color:#c44a87;">
+        Facturación
+    </h1>
+
+    <p class="text-center mb-4">
+        Registro demostrativo de facturas de Girls.
+    </p>
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover text-center">
+
+            <thead class="table-dark">
+
+                <tr>
+                    <th>N.º Factura</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>F001-001</td>
+                    <td>Camila Andrade</td>
+                    <td>15/08/2026</td>
+                    <td>$35.00</td>
+                    <td>
+                        <span class="badge bg-success">Pagada</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>F001-002</td>
+                    <td>Valentina Torres</td>
+                    <td>15/08/2026</td>
+                    <td>$25.00</td>
+                    <td>
+                        <span class="badge bg-success">Pagada</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>F001-003</td>
+                    <td>Sofía Mendoza</td>
+                    <td>14/08/2026</td>
+                    <td>$53.00</td>
+                    <td>
+                        <span class="badge bg-warning text-dark">Pendiente</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>F001-004</td>
+                    <td>Daniela Cárdenas</td>
+                    <td>13/08/2026</td>
+                    <td>$28.00</td>
+                    <td>
+                        <span class="badge bg-success">Pagada</span>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

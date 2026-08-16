@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+
+{% block title %}Girls - Inicio{% endblock %}
+
+{% block content %}
+
+<!-- INICIO -->
+<section id="inicio" class="hero">
+
+    <h1>Bienvenidos a Girls</h1>
+
+    <p>
+        Tienda de ropa y maquillaje inspirada en las tendencias más populares de TikTok.
+    </p>
+
+    <a href="#productos" class="btn btn-light btn-lg me-2">
+        Ver Productos
+    </a>
+
+    <button
+        type="button"
+        class="btn btn-warning btn-lg"
+        data-bs-toggle="modal"
+        data-bs-target="#modalProducto">
+        Conocer más
+    </button>
+
+</section>
+
+
+<!-- QUIÉNES SOMOS -->
+<section id="quienes" class="container my-5">
+
+    <h2 class="text-center mb-4">
+        Quiénes Somos
+    </h2>
+
+    <div class="row align-items-center">
+
+        <div class="col-md-6">
+
+            <p>
+                Girls es una tienda creada para personas que desean estar
+                al día con las últimas tendencias de moda y belleza.
+                Nuestro emprendimiento ofrece ropa moderna, accesorios
+                y maquillaje inspirados en estilos virales de TikTok.
+                Buscamos brindar productos de calidad a precios accesibles
+                para que nuestros clientes expresen su personalidad y confianza.
+            </p>
+
+        </div>
+
+        <div class="col-md-6 text-center">
+
+            <img
+                src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b"
+                alt="Moda femenina"
+                class="img-fluid rounded">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PRODUCTOS -->
+<section id="productos" class="container my-5">
+
+    <h2 class="text-center mb-4">
+        Nuestros Productos
+    </h2>
+
+    <div id="contenedorProductos" class="row">
+        <!-- Los productos se mostrarán desde JavaScript -->
+    </div>
+
+</section>
+
+
+<!-- REGISTRAR PRODUCTO -->
+<section class="container my-5">
+
+    <h2 class="text-center mb-4">
+        Registrar Producto
+    </h2>
+
+    <form id="formProducto">
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Nombre del producto
+                </label>
+
+                <input
+                    type="text"
+                    id="nombre"
+                    class="form-control"
+                    placeholder="Nombre del producto">
+
+                <div id="errorNombre"></div>
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Categoría
+                </label>
+
+                <select
+                    id="categoria"
+                    class="form-select">
+
+                    <option value="">
+                        Seleccione una categoría
+                    </option>
+
+                    <option>Ropa</option>
+                    <option>Maquillaje</option>
+                    <option>Accesorios</option>
+
+                </select>
+
+                <div id="errorCategoria"></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Descripción
+            </label>
+
+            <textarea
+                id="descripcion"
+                class="form-control"
+                rows="4"
+                placeholder="Descripción"></textarea>
+
+            <div id="errorDescripcion"></div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="btn btn-success">
+
+            Agregar Producto
+
+        </button>
+
+    </form>
+
+
+    <div
+        id="mensaje"
+        class="alert alert-success mt-3 d-none">
+
+        Producto agregado correctamente.
+
+    </div>
+
+
+    <div
+        id="spinner"
+        class="text-center mt-3 d-none">
+
+        <div
+            class="spinner-border text-primary"
+            role="status">
+
+            <span class="visually-hidden">
+                Cargando...
+            </span>
+
+        </div>
+
+        <p class="mt-2">
+            Cargando...
+        </p>
+
+    </div>
+
+
+    <h4 class="mt-3">
+
+        Productos registrados:
+        <span id="total">0</span>
+
+    </h4>
+
+</section>
+
+
+<!-- CONTACTO -->
+<section id="contacto" class="container my-5">
+
+    <h2 class="text-center mb-4">
+        Contacto
+    </h2>
+
+    <form>
+
+        <input
+            type="text"
+            class="form-control mb-3"
+            placeholder="Nombre">
+
+        <input
+            type="email"
+            class="form-control mb-3"
+            placeholder="Correo electrónico">
+
+        <input
+            type="text"
+            class="form-control mb-3"
+            placeholder="Asunto">
+
+        <textarea
+            class="form-control mb-3"
+            rows="5"
+            placeholder="Mensaje"></textarea>
+
+        <button
+            type="submit"
+            class="btn btn-primary">
+
+            Enviar
+
+        </button>
+
+    </form>
+
+
+    <div class="text-center mt-4">
+
+        <p>Correo: scarlethtenecota@gmail.com</p>
+
+        <p>Teléfono: +593 987127865</p>
+
+        <p>Dirección: Quito, Ecuador</p>
+
+        <a
+            href="https://www.tiktok.com/@bsfshop"
+            target="_blank"
+            class="btn btn-dark">
+
+            TikTok
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- VIDEO -->
+<section class="container text-center my-5">
+
+    <h2>
+        Video de Tendencias
+    </h2>
+
+    <p>
+        Conoce nuestras últimas tendencias de moda y maquillaje.
+    </p>
+
+    <a
+        href="https://www.tiktok.com/@bsfshop/video/7629913877270039829?is_from_webapp=1&sender_device=pc"
+        target="_blank"
+        class="btn btn-success">
+
+        Ver Video
+
+    </a>
+
+</section>
+
+
+<!-- INFORMACIÓN ADICIONAL -->
+<aside class="container p-3 my-4">
+
+    <h3>
+        Información Adicional
+    </h3>
+
+    <p>
+        Horario de atención: Lunes a Sábado de 09:00 a 18:00.
+    </p>
+
+    <p>
+        Promoción: 15% de descuento en tu primera compra.
+    </p>
+
+</aside>
+
+
+<!-- MODAL -->
+<div
+    class="modal fade"
+    id="modalProducto"
+    tabindex="-1"
+    aria-labelledby="modalProductoLabel"
+    aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5
+                    class="modal-title"
+                    id="modalProductoLabel">
+
+                    Bienvenido a Girls
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Cerrar">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <p>
+                    <strong>Girls Boutique</strong> es una tienda de ropa,
+                    maquillaje y accesorios inspirados en las últimas
+                    tendencias de TikTok.
+                </p>
+
+                <p>
+                    Ofrecemos productos modernos, de calidad y a precios
+                    accesibles para que nuestros clientes expresen su estilo
+                    con confianza.
+                </p>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal">
+
+                    Aceptar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MODAL PRODUCTO REGISTRADO -->
+<div
+    class="modal fade"
+    id="modalRegistro"
+    tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Producto registrado
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                El producto fue agregado correctamente.
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    data-bs-dismiss="modal">
+
+                    Aceptar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
