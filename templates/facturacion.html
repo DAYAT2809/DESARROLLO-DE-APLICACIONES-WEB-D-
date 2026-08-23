@@ -32,48 +32,41 @@
 
             <tbody>
 
-                <tr>
-                    <td>F001-001</td>
-                    <td>Camila Andrade</td>
-                    <td>15/08/2026</td>
-                    <td>$35.00</td>
-                    <td>
-                        <span class="badge bg-success">Pagada</span>
-                    </td>
-                </tr>
+    {% for factura in facturas %}
 
-                <tr>
-                    <td>F001-002</td>
-                    <td>Valentina Torres</td>
-                    <td>15/08/2026</td>
-                    <td>$25.00</td>
-                    <td>
-                        <span class="badge bg-success">Pagada</span>
-                    </td>
-                </tr>
+    <tr>
 
-                <tr>
-                    <td>F001-003</td>
-                    <td>Sofía Mendoza</td>
-                    <td>14/08/2026</td>
-                    <td>$53.00</td>
-                    <td>
-                        <span class="badge bg-warning text-dark">Pendiente</span>
-                    </td>
-                </tr>
+        <td>{{ factura.numero }}</td>
 
-                <tr>
-                    <td>F001-004</td>
-                    <td>Daniela Cárdenas</td>
-                    <td>13/08/2026</td>
-                    <td>$28.00</td>
-                    <td>
-                        <span class="badge bg-success">Pagada</span>
-                    </td>
-                </tr>
+        <td>{{ factura.cliente }}</td>
+
+        <td>{{ factura.fecha }}</td>
+
+        <td>${{ factura.total }}</td>
+
+        <td>
+
+            {% if factura.estado == "Pagada" %}
+
+                <span class="badge bg-success">
+                    {{ factura.estado }}
+                </span>
+
+            {% else %}
+
+                <span class="badge bg-warning text-dark">
+                    {{ factura.estado }}
+                </span>
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
 
             </tbody>
-
         </table>
 
     </div>

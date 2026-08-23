@@ -32,29 +32,17 @@
 
             <tbody>
 
-                <tr>
-                    <td>001</td>
-                    <td>Moda Trend S.A.</td>
-                    <td>Ropa</td>
-                    <td>0981234567</td>
-                    <td>Quito</td>
-                </tr>
+    {% for proveedor in proveedores %}
 
-                <tr>
-                    <td>002</td>
-                    <td>Bella Cosmetics</td>
-                    <td>Maquillaje</td>
-                    <td>0992345678</td>
-                    <td>Guayaquil</td>
-                </tr>
+    <tr>
+        <td>{{ proveedor.id }}</td>
+        <td>{{ proveedor.nombre|upper }}</td>
+        <td>{{ proveedor.producto }}</td>
+        <td>{{ proveedor.contacto }}</td>
+        <td>{{ proveedor.ciudad }}</td>
+    </tr>
 
-                <tr>
-                    <td>003</td>
-                    <td>Style Accessories</td>
-                    <td>Accesorios</td>
-                    <td>0973456789</td>
-                    <td>Cuenca</td>
-                </tr>
+    {% endfor %}
 
             </tbody>
 

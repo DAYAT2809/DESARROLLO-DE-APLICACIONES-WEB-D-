@@ -16,44 +16,51 @@
 
     <div class="row">
 
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Vestido Rosa Elegante</h5>
-                    <p class="card-text">
-                        Vestido moderno ideal para ocasiones especiales.
-                    </p>
-                    <span class="badge bg-primary">Ropa</span>
-                    <h5 class="mt-3">$35.00</h5>
-                </div>
-            </div>
-        </div>
+        {% for producto in productos %}
 
         <div class="col-md-4 mb-4">
-            <div class="card h-100">
+
+            <div class="card h-100 shadow-sm">
+
                 <div class="card-body text-center">
-                    <h5 class="card-title">Set de Maquillaje</h5>
+
+                    <h5 class="card-title">
+                        {{ producto.nombre|upper }}
+                    </h5>
+
                     <p class="card-text">
-                        Set completo para crear diferentes estilos de maquillaje.
+                        Categoría: {{ producto.categoria }}
                     </p>
-                    <span class="badge bg-danger">Maquillaje</span>
-                    <h5 class="mt-3">$25.00</h5>
+
+                    <h5 class="mt-3">
+                        ${{ producto.precio }}
+                    </h5>
+
+                    <p class="mt-3">
+                        Stock: {{ producto.stock }}
+                    </p>
+
+                    {% if producto.stock > 0 %}
+
+                        <span class="badge bg-success">
+                            Disponible
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger">
+                            Agotado
+                        </span>
+
+                    {% endif %}
+
                 </div>
+
             </div>
+
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Bolso Fashion</h5>
-                    <p class="card-text">
-                        Bolso moderno para complementar cualquier outfit.
-                    </p>
-                    <span class="badge bg-success">Accesorios</span>
-                    <h5 class="mt-3">$28.00</h5>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
 
     </div>
 
