@@ -1,6 +1,13 @@
 from flask import Flask, render_template
 
+from forms.producto_form import ProductoForm
+from forms.cliente_form import ClienteForm
+from forms.proveedor_form import ProveedorForm
+from forms.facturacion_form import FacturacionForm
+
 app = Flask(__name__)
+
+app.config["SECRET_KEY"] = "clave-secreta-girls-2026"
 
 
 @app.route("/")
@@ -13,8 +20,9 @@ def inicio():
     )
 
 
-@app.route("/productos")
+@app.route("/productos", methods=["GET", "POST"])
 def productos():
+    form = ProductoForm()
 
     productos = [
         {
@@ -43,14 +51,28 @@ def productos():
         }
     ]
 
+    if form.validate_on_submit():
+        nuevo_producto = {
+            "nombre": form.nombre.data,
+            "descripcion": form.descripcion.data,
+            "precio": form.precio.data,
+            "stock": form.stock.data,
+            "categoria": "Sin categoría"
+    }
+
+        productos.append(nuevo_producto)
+
     return render_template(
         "productos.html",
-        productos=productos
+        productos=productos,
+        form=form
     )
 
 
-@app.route("/clientes")
+@app.route("/clientes", methods=["GET", "POST"])
 def clientes():
+
+    form = ClienteForm()
 
     clientes = [
         {
@@ -83,14 +105,29 @@ def clientes():
         }
     ]
 
+    if form.validate_on_submit():
+
+        nuevo_cliente = {
+            "id": str(len(clientes) + 1).zfill(3),
+            "nombre": form.nombre.data,
+            "correo": form.email.data,
+            "telefono": form.telefono.data,
+            "ciudad": form.direccion.data
+        }
+
+        clientes.append(nuevo_cliente)
+
     return render_template(
         "clientes.html",
-        clientes=clientes
+        clientes=clientes,
+        form=form
     )
 
 
-@app.route("/proveedores")
+@app.route("/proveedores", methods=["GET", "POST"])
 def proveedores():
+
+    form = ProveedorForm()
 
     proveedores = [
         {
@@ -116,13 +153,28 @@ def proveedores():
         }
     ]
 
+    if form.validate_on_submit():
+
+        nuevo_proveedor = {
+            "id": str(len(proveedores) + 1).zfill(3),
+            "nombre": form.nombre.data,
+            "producto": form.empresa.data,
+            "contacto": form.telefono.data,
+            "ciudad": form.email.data
+        }
+
+        proveedores.append(nuevo_proveedor)
+
     return render_template(
         "proveedores.html",
-        proveedores=proveedores
+        proveedores=proveedores,
+        form=form
     )
 
-@app.route("/facturacion")
+@app.route("/facturacion", methods=["GET", "POST"])
 def facturacion():
+
+    form = FacturacionForm()
 
     facturas = [
         {
@@ -155,11 +207,25 @@ def facturacion():
         }
     ]
 
+    if form.validate_on_submit():
+
+        total = form.cantidad.data * form.precio.data
+
+        nueva_factura = {
+            "numero": f"F001-{len(facturas) + 1:03d}",
+            "cliente": form.cliente.data,
+            "fecha": "29/08/2026",
+            "total": total,
+            "estado": "Pendiente"
+        }
+
+        facturas.append(nueva_factura)
+
     return render_template(
         "facturacion.html",
-        facturas=facturas
+        facturas=facturas,
+        form=form
     )
-
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -6,43 +6,140 @@
 
 <section class="container my-5">
 
-    <h1 class="text-center mb-4" style="color: #c44a87;">
-        Nuestros Clientes
-    </h1>
+```
+<h1 class="text-center mb-4" style="color: #c44a87;">
+    Nuestros Clientes
+</h1>
 
-    <div class="table-responsive">
+<!-- FORMULARIO PARA AGREGAR CLIENTES -->
 
-        <table class="table table-bordered table-hover text-center">
+<div class="card shadow-sm mb-5">
 
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Teléfono</th>
-                    <th>Ciudad</th>
-                </tr>
-            </thead>
+    <div class="card-body">
 
-            <tbody>
+        <h3 class="text-center mb-4" style="color:#c44a87;">
+            Agregar nuevo cliente
+        </h3>
 
-                {% for cliente in clientes %}
+        <form method="POST">
 
-                <tr>
-                    <td>{{ cliente.id }}</td>
-                    <td>{{ cliente.nombre|upper }}</td>
-                    <td>{{ cliente.correo }}</td>
-                    <td>{{ cliente.telefono }}</td>
-                    <td>{{ cliente.ciudad }}</td>
-                </tr>
+            {{ form.hidden_tag() }}
 
+            <!-- NOMBRE -->
+
+            <div class="mb-3">
+
+                {{ form.nombre.label(class="form-label") }}
+
+                {{ form.nombre(class="form-control") }}
+
+                {% for error in form.nombre.errors %}
+                    <div class="text-danger">
+                        {{ error }}
+                    </div>
                 {% endfor %}
 
-            </tbody>
+            </div>
 
-        </table>
+
+            <!-- CORREO -->
+
+            <div class="mb-3">
+
+                {{ form.email.label(class="form-label") }}
+
+                {{ form.email(class="form-control") }}
+
+                {% for error in form.email.errors %}
+                    <div class="text-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- TELÉFONO -->
+
+            <div class="mb-3">
+
+                {{ form.telefono.label(class="form-label") }}
+
+                {{ form.telefono(class="form-control") }}
+
+                {% for error in form.telefono.errors %}
+                    <div class="text-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- DIRECCIÓN -->
+
+            <div class="mb-3">
+
+                {{ form.direccion.label(class="form-label") }}
+
+                {{ form.direccion(class="form-control") }}
+
+                {% for error in form.direccion.errors %}
+                    <div class="text-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- BOTÓN -->
+
+            {{ form.submit(class="btn btn-primary w-100") }}
+
+        </form>
 
     </div>
+
+</div>
+
+
+<!-- TABLA DE CLIENTES -->
+
+<div class="table-responsive">
+
+    <table class="table table-bordered table-hover text-center">
+
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Ciudad</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for cliente in clientes %}
+
+            <tr>
+                <td>{{ cliente.id }}</td>
+                <td>{{ cliente.nombre|upper }}</td>
+                <td>{{ cliente.correo }}</td>
+                <td>{{ cliente.telefono }}</td>
+                <td>{{ cliente.ciudad }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+```
 
 </section>
 

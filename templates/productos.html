@@ -6,63 +6,161 @@
 
 <section class="container my-5">
 
-    <h1 class="text-center mb-4" style="color:#c44a87;">
-        Nuestros Productos
-    </h1>
+```
+<h1 class="text-center mb-4" style="color:#c44a87;">
+    Nuestros Productos
+</h1>
 
-    <p class="text-center mb-5">
-        Conoce algunos de los productos disponibles en Girls.
-    </p>
+<p class="text-center mb-5">
+    Conoce algunos de los productos disponibles en Girls.
+</p>
 
-    <div class="row">
 
-        {% for producto in productos %}
+<!-- FORMULARIO -->
 
-        <div class="col-md-4 mb-4">
+<div class="card shadow-sm mb-5">
 
-            <div class="card h-100 shadow-sm">
+    <div class="card-body">
 
-                <div class="card-body text-center">
+        <h3 class="text-center mb-4" style="color:#c44a87;">
+            Agregar nuevo producto
+        </h3>
 
-                    <h5 class="card-title">
-                        {{ producto.nombre|upper }}
-                    </h5>
+        <form method="POST">
 
-                    <p class="card-text">
-                        Categoría: {{ producto.categoria }}
-                    </p>
+            {{ form.hidden_tag() }}
 
-                    <h5 class="mt-3">
-                        ${{ producto.precio }}
-                    </h5>
+            <!-- NOMBRE -->
 
-                    <p class="mt-3">
-                        Stock: {{ producto.stock }}
-                    </p>
+            <div class="mb-3">
 
-                    {% if producto.stock > 0 %}
+                {{ form.nombre.label(class="form-label") }}
 
-                        <span class="badge bg-success">
-                            Disponible
-                        </span>
+                {{ form.nombre(class="form-control") }}
 
-                    {% else %}
+                {% for error in form.nombre.errors %}
+                    <div class="text-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
 
-                        <span class="badge bg-danger">
-                            Agotado
-                        </span>
+            </div>
 
-                    {% endif %}
 
-                </div>
+            <!-- DESCRIPCIÓN -->
+
+            <div class="mb-3">
+
+                {{ form.descripcion.label(class="form-label") }}
+
+                {{ form.descripcion(class="form-control") }}
+
+                {% for error in form.descripcion.errors %}
+                    <div class="text-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- PRECIO -->
+
+            <div class="mb-3">
+
+                {{ form.precio.label(class="form-label") }}
+
+                {{ form.precio(class="form-control") }}
+
+                {% for error in form.precio.errors %}
+                    <div class="text-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- STOCK -->
+
+            <div class="mb-3">
+
+                {{ form.stock.label(class="form-label") }}
+
+                {{ form.stock(class="form-control") }}
+
+                {% for error in form.stock.errors %}
+                    <div class="text-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- BOTÓN -->
+
+            {{ form.submit(class="btn btn-primary w-100") }}
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- PRODUCTOS -->
+
+<div class="row">
+
+    {% for producto in productos %}
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card h-100 shadow-sm">
+
+            <div class="card-body text-center">
+
+                <h5 class="card-title">
+                    {{ producto.nombre|upper }}
+                </h5>
+
+                <p class="card-text">
+                    Categoría: {{ producto.categoria }}
+                </p>
+
+                <h5 class="mt-3">
+                    ${{ producto.precio }}
+                </h5>
+
+                <p class="mt-3">
+                    Stock: {{ producto.stock }}
+                </p>
+
+                {% if producto.stock > 0 %}
+
+                    <span class="badge bg-success">
+                        Disponible
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger">
+                        Agotado
+                    </span>
+
+                {% endif %}
 
             </div>
 
         </div>
 
-        {% endfor %}
-
     </div>
+
+    {% endfor %}
+
+</div>
+```
 
 </section>
 
