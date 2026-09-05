@@ -1,4 +1,6 @@
 from flask import Flask, render_template
+import sqlite3
+import os
 
 from forms.producto_form import ProductoForm
 from forms.cliente_form import ClienteForm
@@ -8,6 +10,26 @@ from forms.facturacion_form import FacturacionForm
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "clave-secreta-girls-2026"
+
+DATABASE = os.path.join("data", "ferreteria.db")
+
+def crear_base_datos():
+    os.makedirs("data", exist_ok=True)
+
+    conn = sqlite3.connect(DATABASE)
+
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS productos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            descripcion TEXT,
+            precio REAL NOT NULL,
+            stock INTEGER NOT NULL
+        )
+    """)
+
+    conn.commit()
+    conn.close()
 
 
 @app.route("/")
@@ -24,50 +46,40 @@ def inicio():
 def productos():
     form = ProductoForm()
 
-    productos = [
-        {
-            "nombre": "Blusa Rosada",
-            "precio": 25.00,
-            "stock": 8,
-            "categoria": "Ropa"
-        },
-        {
-            "nombre": "Vestido Celeste",
-            "precio": 35.00,
-            "stock": 4,
-            "categoria": "Ropa"
-        },
-        {
-            "nombre": "Labial Nude",
-            "precio": 12.50,
-            "stock": 0,
-            "categoria": "Maquillaje"
-        },
-        {
-            "nombre": "Gloss Rosado",
-            "precio": 10.00,
-            "stock": 6,
-            "categoria": "Maquillaje"
-        }
-    ]
-
     if form.validate_on_submit():
-        nuevo_producto = {
-            "nombre": form.nombre.data,
-            "descripcion": form.descripcion.data,
-            "precio": form.precio.data,
-            "stock": form.stock.data,
-            "categoria": "Sin categoría"
-    }
 
-        productos.append(nuevo_producto)
+        conn = sqlite3.connect(DATABASE)
+
+        conn.execute("""
+            INSERT INTO productos (nombre, descripcion, precio, stock)
+            VALUES (?, ?, ?, ?)
+        """, (
+            form.nombre.data,
+            form.descripcion.data,
+            form.precio.data,
+            form.stock.data
+        ))
+
+        conn.commit()
+        conn.close()
+
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+
+    cursor = conn.execute("""
+        SELECT id, nombre, descripcion, precio, stock
+        FROM productos
+    """)
+
+    productos = cursor.fetchall()
+
+    conn.close()
 
     return render_template(
         "productos.html",
         productos=productos,
         form=form
     )
-
 
 @app.route("/clientes", methods=["GET", "POST"])
 def clientes():
@@ -228,4 +240,5 @@ def facturacion():
     )
 
 if __name__ == "__main__":
+    crear_base_datos()
     app.run(debug=True)
