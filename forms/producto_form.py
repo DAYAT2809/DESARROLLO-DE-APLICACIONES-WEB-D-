@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, IntegerField, SubmitField
+from wtforms import StringField, FloatField, IntegerField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length, NumberRange
 
 
 class ProductoForm(FlaskForm):
+
     nombre = StringField(
         "Nombre del producto",
         validators=[
@@ -33,6 +34,14 @@ class ProductoForm(FlaskForm):
         validators=[
             DataRequired(message="El stock es obligatorio."),
             NumberRange(min=0, message="El stock no puede ser negativo.")
+        ]
+    )
+
+    proveedor = SelectField(
+        "Proveedor",
+        coerce=int,
+        validators=[
+            DataRequired(message="Debe seleccionar un proveedor.")
         ]
     )
 

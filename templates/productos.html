@@ -6,163 +6,242 @@
 
 <section class="container my-5">
 
-```
-<h1 class="text-center mb-4" style="color:#c44a87;">
-    Nuestros Productos
-</h1>
+    <h1 class="text-center mb-4" style="color:#c44a87;">
+        Nuestros Productos
+    </h1>
 
-<p class="text-center mb-5">
-    Conoce algunos de los productos disponibles en Girls.
-</p>
+    <p class="text-center mb-5">
+        Conoce algunos de los productos disponibles en Girls.
+    </p>
 
-<!-- FORMULARIO -->
 
-<div class="card shadow-sm mb-5">
+    <!-- ========================= -->
+    <!-- FORMULARIO -->
+    <!-- ========================= -->
 
-    <div class="card-body">
+    <div class="card shadow-sm mb-5">
 
-        <h3 class="text-center mb-4" style="color:#c44a87;">
-            Agregar nuevo producto
-        </h3>
+        <div class="card-body">
 
-        <form method="POST">
+            <h3 class="text-center mb-4" style="color:#c44a87;">
+                Agregar nuevo producto
+            </h3>
 
-            {{ form.hidden_tag() }}
+            <form method="POST">
 
-            <!-- NOMBRE -->
+                {{ form.hidden_tag() }}
 
-            <div class="mb-3">
 
-                {{ form.nombre.label(class="form-label") }}
+                <!-- NOMBRE -->
 
-                {{ form.nombre(class="form-control") }}
+                <div class="mb-3">
 
-                {% for error in form.nombre.errors %}
-                    <div class="text-danger">
-                        {{ error }}
-                    </div>
-                {% endfor %}
+                    {{ form.nombre.label(class="form-label") }}
 
-            </div>
+                    {{ form.nombre(class="form-control") }}
 
-            <!-- DESCRIPCIÓN -->
+                    {% for error in form.nombre.errors %}
+                        <div class="text-danger">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
 
-            <div class="mb-3">
+                </div>
 
-                {{ form.descripcion.label(class="form-label") }}
 
-                {{ form.descripcion(class="form-control") }}
+                <!-- DESCRIPCIÓN -->
 
-                {% for error in form.descripcion.errors %}
-                    <div class="text-danger">
-                        {{ error }}
-                    </div>
-                {% endfor %}
+                <div class="mb-3">
 
-            </div>
+                    {{ form.descripcion.label(class="form-label") }}
 
-            <!-- PRECIO -->
+                    {{ form.descripcion(class="form-control") }}
 
-            <div class="mb-3">
+                    {% for error in form.descripcion.errors %}
+                        <div class="text-danger">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
 
-                {{ form.precio.label(class="form-label") }}
+                </div>
 
-                {{ form.precio(class="form-control") }}
 
-                {% for error in form.precio.errors %}
-                    <div class="text-danger">
-                        {{ error }}
-                    </div>
-                {% endfor %}
+                <!-- PRECIO -->
 
-            </div>
+                <div class="mb-3">
 
-            <!-- STOCK -->
+                    {{ form.precio.label(class="form-label") }}
 
-            <div class="mb-3">
+                    {{ form.precio(class="form-control") }}
 
-                {{ form.stock.label(class="form-label") }}
+                    {% for error in form.precio.errors %}
+                        <div class="text-danger">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
 
-                {{ form.stock(class="form-control") }}
+                </div>
 
-                {% for error in form.stock.errors %}
-                    <div class="text-danger">
-                        {{ error }}
-                    </div>
-                {% endfor %}
 
-            </div>
+                <!-- STOCK -->
 
-            <!-- BOTÓN -->
+                <div class="mb-3">
 
-            {{ form.submit(class="btn btn-primary w-100") }}
+                    {{ form.stock.label(class="form-label") }}
 
-        </form>
+                    {{ form.stock(class="form-control") }}
 
-    </div>
+                    {% for error in form.stock.errors %}
+                        <div class="text-danger">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
 
-</div>
+                </div>
 
-<!-- PRODUCTOS GUARDADOS EN SQLITE -->
 
-<div class="row">
+                <!-- PROVEEDOR -->
 
-    {% for producto in productos %}
+                <div class="mb-3">
 
-    <div class="col-md-4 mb-4">
+                    {{ form.proveedor.label(class="form-label") }}
 
-        <div class="card h-100 shadow-sm">
+                    {{ form.proveedor(class="form-select") }}
 
-            <div class="card-body text-center">
+                    {% for error in form.proveedor.errors %}
+                        <div class="text-danger">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
 
-                <h5 class="card-title">
-                    {{ producto["nombre"]|upper }}
-                </h5>
+                </div>
 
-                <p class="card-text">
-                    {{ producto["descripcion"] }}
-                </p>
 
-                <h5 class="mt-3">
-                    ${{ "%.2f"|format(producto["precio"]) }}
-                </h5>
+                <!-- BOTÓN -->
 
-                <p class="mt-3">
-                    Stock: {{ producto["stock"] }}
-                </p>
+                {{ form.submit(class="btn btn-primary w-100") }}
 
-                {% if producto["stock"] > 0 %}
-
-                    <span class="badge bg-success">
-                        Disponible
-                    </span>
-
-                {% else %}
-
-                    <span class="badge bg-danger">
-                        Agotado
-                    </span>
-
-                {% endif %}
-
-            </div>
+            </form>
 
         </div>
 
     </div>
 
-    {% else %}
 
-    <div class="col-12 text-center">
-        <p class="text-muted">
-            No hay productos registrados todavía.
-        </p>
+    <!-- ========================= -->
+    <!-- PRODUCTOS -->
+    <!-- ========================= -->
+
+    <div class="row">
+
+        {% for producto in productos %}
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card h-100 shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h5 class="card-title">
+                        {{ producto["nombre"]|upper }}
+                    </h5>
+
+
+                    <p class="card-text">
+                        {{ producto["descripcion"] }}
+                    </p>
+
+
+                    <h5 class="mt-3">
+                        ${{ "%.2f"|format(producto["precio"]) }}
+                    </h5>
+
+
+                    <p class="mt-3">
+                        Stock: {{ producto["stock"] }}
+                    </p>
+
+
+                    <!-- PROVEEDOR -->
+
+                    <p class="mb-2">
+
+                        <strong>Proveedor:</strong>
+
+                        {% if producto["proveedor"] %}
+
+                            {{ producto["proveedor"] }}
+
+                        {% else %}
+
+                            Sin proveedor
+
+                        {% endif %}
+
+                    </p>
+
+
+                    {% if producto["stock"] > 0 %}
+
+                        <span class="badge bg-success">
+                            Disponible
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger">
+                            Agotado
+                        </span>
+
+                    {% endif %}
+
+
+                    <!-- BOTONES -->
+
+                    <div class="mt-3 d-flex gap-2 justify-content-center">
+
+                        <a
+                            href="{{ url_for('editar_producto', id=producto['id_producto']) }}"
+                            class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('eliminar_producto', id=producto['id_producto']) }}"
+                            onsubmit="return confirm('¿Deseas eliminar este producto?');">
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger btn-sm">
+                                Eliminar
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="col-12 text-center">
+
+            <p class="text-muted">
+                No hay productos registrados todavía.
+            </p>
+
+        </div>
+
+        {% endfor %}
+
     </div>
-
-    {% endfor %}
-
-</div>
-```
 
 </section>
 
