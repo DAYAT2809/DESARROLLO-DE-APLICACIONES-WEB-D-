@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Gestión de Usuarios</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <h4>Agregar usuario</h4>
+
+            <form method="POST">
+
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.usuario.label(class="form-label") }}
+                    {{ form.usuario(class="form-control") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.confirmar_password.label(class="form-label") }}
+                    {{ form.confirmar_password(class="form-control") }}
+                </div>
+
+                {{ form.submit(class="btn btn-primary") }}
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <h4>Usuarios registrados</h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for usuario in usuarios %}
+
+                        <tr>
+
+                            <td>{{ usuario.id }}</td>
+
+                            <td>{{ usuario.usuario }}</td>
+
+                            <td>
+
+                                <a href="{{ url_for('editar_usuario', id=usuario.id) }}"
+                                   class="btn btn-warning btn-sm">
+                                    Editar
+                                </a>
+
+                                {% if usuario.id != current_user.id %}
+
+                                <form action="{{ url_for('eliminar_usuario', id=usuario.id) }}"
+                                      method="POST"
+                                      style="display:inline;">
+
+                                    <button type="submit"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('¿Deseas eliminar este usuario?');">
+                                        Eliminar
+                                    </button>
+
+                                </form>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

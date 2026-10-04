@@ -519,6 +519,210 @@ def eliminar_producto(id):
 
     return redirect("/productos")
 
+# =========================
+# USUARIOS
+# =========================
+
+@app.route("/usuarios", methods=["GET", "POST"])
+@login_required
+def usuarios():
+
+    form = UsuarioForm()
+
+    # =========================
+    # AGREGAR USUARIO
+    # =========================
+
+    if form.validate_on_submit():
+
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+
+        # Verificar si el usuario ya existe
+        cursor.execute("""
+            SELECT id
+            FROM usuarios
+            WHERE usuario = %s
+        """, (form.usuario.data,))
+
+        usuario_existente = cursor.fetchone()
+
+        if usuario_existente:
+
+            flash(
+                "El nombre de usuario ya existe.",
+                "danger"
+            )
+
+            cursor.close()
+            conexion.close()
+
+            return redirect(url_for("usuarios"))
+
+        # Proteger contraseña
+        password_hash = generate_password_hash(
+            form.password.data
+        )
+
+        cursor.execute("""
+            INSERT INTO usuarios
+            (usuario, password)
+            VALUES (%s, %s)
+        """, (
+            form.usuario.data,
+            password_hash
+        ))
+
+        conexion.commit()
+
+        cursor.close()
+        conexion.close()
+
+        flash(
+            "Usuario agregado correctamente.",
+            "success"
+        )
+
+        return redirect(url_for("usuarios"))
+
+    # =========================
+    # MOSTRAR USUARIOS
+    # =========================
+
+    conexion = obtener_conexion()
+    cursor = obtener_cursor(conexion)
+
+    cursor.execute("""
+        SELECT
+            id,
+            usuario
+        FROM usuarios
+        ORDER BY id
+    """)
+
+    usuarios = cursor.fetchall()
+
+    cursor.close()
+    conexion.close()
+
+    return render_template(
+        "usuarios.html",
+        usuarios=usuarios,
+        form=form
+    )
+
+
+# =========================
+# EDITAR USUARIO
+# =========================
+
+@app.route("/usuarios/editar/<int:id>", methods=["GET", "POST"])
+@login_required
+def editar_usuario(id):
+
+    conexion = obtener_conexion()
+    cursor = obtener_cursor(conexion)
+
+    if request.method == "POST":
+
+        usuario = request.form["usuario"]
+        password = request.form.get("password")
+
+        if password:
+
+            password_hash = generate_password_hash(password)
+
+            cursor.execute("""
+                UPDATE usuarios
+                SET
+                    usuario = %s,
+                    password = %s
+                WHERE id = %s
+            """, (
+                usuario,
+                password_hash,
+                id
+            ))
+
+        else:
+
+            cursor.execute("""
+                UPDATE usuarios
+                SET usuario = %s
+                WHERE id = %s
+            """, (
+                usuario,
+                id
+            ))
+
+        conexion.commit()
+
+        cursor.close()
+        conexion.close()
+
+        flash(
+            "Usuario actualizado correctamente.",
+            "success"
+        )
+
+        return redirect(url_for("usuarios"))
+
+    cursor.execute("""
+        SELECT
+            id,
+            usuario
+        FROM usuarios
+        WHERE id = %s
+    """, (id,))
+
+    usuario = cursor.fetchone()
+
+    cursor.close()
+    conexion.close()
+
+    return render_template(
+        "editar_usuario.html",
+        usuario=usuario
+    )
+
+
+# =========================
+# ELIMINAR USUARIO
+# =========================
+
+@app.route("/usuarios/eliminar/<int:id>", methods=["POST"])
+@login_required
+def eliminar_usuario(id):
+
+    # No permitir eliminar el usuario que está conectado
+    if int(current_user.id) == id:
+
+        flash(
+            "No puedes eliminar el usuario con el que has iniciado sesión.",
+            "danger"
+        )
+
+        return redirect(url_for("usuarios"))
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        DELETE FROM usuarios
+        WHERE id = %s
+    """, (id,))
+
+    conexion.commit()
+
+    cursor.close()
+    conexion.close()
+
+    flash(
+        "Usuario eliminado correctamente.",
+        "success"
+    )
+
+    return redirect(url_for("usuarios"))
 
 # =========================
 # CLIENTES
