@@ -204,7 +204,7 @@ def login():
     if form.validate_on_submit():
 
         conexion = obtener_conexion()
-        cursor = conexion.cursor()
+        cursor = obtener_cursor(conexion)
 
         cursor.execute("""
             SELECT id, usuario, password
@@ -296,7 +296,7 @@ def productos():
     # =========================
 
     conexion = obtener_conexion()
-    cursor = conexion.cursor(dictionary=True)
+    cursor = obtener_cursor(conexion)
 
     cursor.execute("""
         SELECT id_proveedor, nombre, empresa
@@ -363,7 +363,7 @@ def productos():
     # =========================
 
     conexion = obtener_conexion()
-    cursor = conexion.cursor(dictionary=True)
+    cursor = obtener_cursor(conexion)
 
     cursor.execute("""
         SELECT
@@ -407,7 +407,7 @@ def productos():
 def editar_producto(id):
 
     conexion = obtener_conexion()
-    cursor = conexion.cursor(dictionary=True)
+    cursor = obtener_cursor(conexion)
 
     # =========================
     # OBTENER PROVEEDORES
@@ -632,7 +632,7 @@ def proveedores():
     # =========================
 
     conexion = obtener_conexion()
-    cursor = conexion.cursor(dictionary=True)
+    cursor = obtener_cursor(conexion)
 
     cursor.execute("""
         SELECT
@@ -664,7 +664,7 @@ def proveedores():
 def editar_proveedor(id):
 
     conexion = obtener_conexion()
-    cursor = conexion.cursor(dictionary=True)
+    cursor = obtener_cursor(conexion)
 
     # =========================
     # ACTUALIZAR PROVEEDOR
