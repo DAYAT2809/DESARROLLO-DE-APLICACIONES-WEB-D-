@@ -1,4 +1,14 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, flash
+
+from flask_login import (
+    LoginManager,
+    login_user,
+    logout_user,
+    login_required,
+    current_user
+)
+
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from conexion.conexion import obtener_conexion
 
@@ -6,12 +16,170 @@ from forms.producto_form import ProductoForm
 from forms.cliente_form import ClienteForm
 from forms.proveedor_form import ProveedorForm
 from forms.facturacion_form import FacturacionForm
+from forms.login_form import LoginForm
+from forms.usuario_form import UsuarioForm
+
+from models import Usuario
 
 
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "clave-secreta-girls-2026"
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+@login_manager.user_loader
+def load_user(user_id):
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT id, usuario, password
+        FROM usuarios
+        WHERE id = %s
+    """, (user_id,))
+
+    usuario = cursor.fetchone()
+
+    cursor.close()
+    conexion.close()
+
+    if usuario:
+        return Usuario(
+            usuario["id"],
+            usuario["usuario"],
+            usuario["password"]
+        )
+
+    return None
+
+# =========================
+# REGISTRO DE USUARIOS
+# =========================
+
+@app.route("/registro", methods=["GET", "POST"])
+def registro():
+
+    form = UsuarioForm()
+
+    if form.validate_on_submit():
+
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+
+        # Verificar si el usuario ya existe
+        cursor.execute("""
+            SELECT id
+            FROM usuarios
+            WHERE usuario = %s
+        """, (form.usuario.data,))
+
+        usuario_existente = cursor.fetchone()
+
+        if usuario_existente:
+            flash("El nombre de usuario ya existe.", "danger")
+
+            cursor.close()
+            conexion.close()
+
+            return render_template(
+                "registro.html",
+                form=form
+            )
+
+        # Proteger la contraseña mediante hash
+        password_hash = generate_password_hash(
+            form.password.data
+        )
+
+        # Guardar usuario en MySQL
+        cursor.execute("""
+            INSERT INTO usuarios (usuario, password)
+            VALUES (%s, %s)
+        """, (
+            form.usuario.data,
+            password_hash
+        ))
+
+        conexion.commit()
+
+        cursor.close()
+        conexion.close()
+
+        flash("Usuario registrado correctamente.", "success")
+
+        return redirect(url_for("login"))
+
+    return render_template(
+        "registro.html",
+        form=form
+    )
+
+# =========================
+# LOGIN
+# =========================
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+
+        conexion = obtener_conexion()
+        cursor = conexion.cursor(dictionary=True)
+
+        cursor.execute("""
+            SELECT id, usuario, password
+            FROM usuarios
+            WHERE usuario = %s
+        """, (form.usuario.data,))
+
+        usuario = cursor.fetchone()
+
+        cursor.close()
+        conexion.close()
+
+        if usuario and check_password_hash(
+            usuario["password"],
+            form.password.data
+        ):
+
+            usuario_obj = Usuario(
+                usuario["id"],
+                usuario["usuario"],
+                usuario["password"]
+            )
+
+            login_user(usuario_obj)
+
+            flash("Inicio de sesión correcto.", "success")
+
+            return redirect(url_for("inicio"))
+
+        flash("Usuario o contraseña incorrectos.", "danger")
+
+    return render_template(
+        "login.html",
+        form=form
+    )
+
+# =========================
+# CERRAR SESIÓN
+# =========================
+
+@app.route("/logout")
+@login_required
+def logout():
+
+    logout_user()
+
+    flash("Sesión cerrada correctamente.", "success")
+
+    return redirect(url_for("login"))
 
 # =========================
 # INICIO
@@ -33,6 +201,7 @@ def inicio():
 # =========================
 
 @app.route("/productos", methods=["GET", "POST"])
+@login_required
 def productos():
 
     form = ProductoForm()
@@ -136,6 +305,7 @@ def productos():
 # =========================
 
 @app.route("/productos/editar/<int:id>", methods=["GET", "POST"])
+@login_required
 def editar_producto(id):
 
     conexion = obtener_conexion()
@@ -222,6 +392,7 @@ def editar_producto(id):
 # =========================
 
 @app.route("/productos/eliminar/<int:id>", methods=["POST"])
+@login_required
 def eliminar_producto(id):
 
     conexion = obtener_conexion()
@@ -245,6 +416,7 @@ def eliminar_producto(id):
 # =========================
 
 @app.route("/clientes", methods=["GET", "POST"])
+@login_required
 def clientes():
 
     form = ClienteForm()
@@ -304,6 +476,7 @@ def clientes():
 # =========================
 
 @app.route("/proveedores", methods=["GET", "POST"])
+@login_required
 def proveedores():
 
     form = ProveedorForm()
@@ -374,6 +547,7 @@ def proveedores():
 # =========================
 
 @app.route("/facturacion", methods=["GET", "POST"])
+@login_required
 def facturacion():
 
     form = FacturacionForm()
