@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Girls - Editar proveedor{% endblock %}
+
+{% block content %}
+
+<section class="container my-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h1 class="text-center mb-4" style="color:#c44a87;">
+                        Editar proveedor
+                    </h1>
+
+                    <form method="POST">
+
+                        <!-- NOMBRE -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Nombre del proveedor
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nombre"
+                                class="form-control"
+                                value="{{ proveedor.nombre }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- EMPRESA -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Empresa
+                            </label>
+
+                            <input
+                                type="text"
+                                name="empresa"
+                                class="form-control"
+                                value="{{ proveedor.empresa }}"
+                            >
+
+                        </div>
+
+
+                        <!-- CORREO -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Correo electrónico
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                value="{{ proveedor.email }}"
+                            >
+
+                        </div>
+
+
+                        <!-- TELÉFONO -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Teléfono
+                            </label>
+
+                            <input
+                                type="text"
+                                name="telefono"
+                                class="form-control"
+                                value="{{ proveedor.telefono }}"
+                            >
+
+                        </div>
+
+
+                        <!-- BOTONES -->
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary w-50"
+                            >
+                                Guardar cambios
+                            </button>
+
+                            <a
+                                href="{{ url_for('proveedores') }}"
+                                class="btn btn-secondary w-50"
+                            >
+                                Cancelar
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

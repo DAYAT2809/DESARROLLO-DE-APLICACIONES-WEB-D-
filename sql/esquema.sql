@@ -14,6 +14,18 @@ CREATE TABLE IF NOT EXISTS proveedores (
 
 );
 
+
+CREATE TABLE IF NOT EXISTS usuarios (
+
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    usuario VARCHAR(50) NOT NULL UNIQUE,
+
+    password VARCHAR(255) NOT NULL
+
+);
+
+
 CREATE TABLE IF NOT EXISTS productos (
 
     id_producto INT AUTO_INCREMENT PRIMARY KEY,
@@ -28,16 +40,10 @@ CREATE TABLE IF NOT EXISTS productos (
 
     id_proveedor INT,
 
-    FOREIGN KEY (id_proveedor) REFERENCES proveedores(id_proveedor)
+    id_usuario INT,
 
-);
+    FOREIGN KEY (id_proveedor) REFERENCES proveedores(id_proveedor),
 
-CREATE TABLE IF NOT EXISTS usuarios (
-
-    id INT AUTO_INCREMENT PRIMARY KEY,
-
-    usuario VARCHAR(50) NOT NULL UNIQUE,
-
-    password VARCHAR(255) NOT NULL
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 
 );
