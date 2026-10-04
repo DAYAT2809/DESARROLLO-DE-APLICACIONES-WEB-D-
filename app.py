@@ -12,7 +12,7 @@ from flask_login import (
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from conexion.conexion import obtener_conexion
+from conexion.conexion import obtener_conexion, obtener_cursor
 
 from forms.producto_form import ProductoForm
 from forms.cliente_form import ClienteForm
@@ -100,7 +100,7 @@ login_manager.login_view = "login"
 def load_user(user_id):
 
     conexion = obtener_conexion()
-    cursor = conexion.cursor(dictionary=True)
+    cursor = obtener_cursor(conexion)
 
     cursor.execute("""
         SELECT id, usuario, password
@@ -121,7 +121,6 @@ def load_user(user_id):
         )
 
     return None
-
 
 # =========================
 # REGISTRO DE USUARIOS
