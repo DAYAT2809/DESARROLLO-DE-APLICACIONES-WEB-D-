@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 
+import os
+
 from flask_login import (
     LoginManager,
     login_user,
@@ -26,6 +28,64 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "clave-secreta-girls-2026"
 
+# =========================
+# CREAR TABLAS EN POSTGRESQL
+# =========================
+
+def crear_tablas_postgresql():
+
+    if not os.getenv("DATABASE_URL"):
+        return
+
+    try:
+
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS usuarios (
+                id SERIAL PRIMARY KEY,
+                usuario VARCHAR(50) NOT NULL UNIQUE,
+                password VARCHAR(255) NOT NULL
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS proveedores (
+                id_proveedor SERIAL PRIMARY KEY,
+                nombre VARCHAR(100) NOT NULL,
+                empresa VARCHAR(100),
+                email VARCHAR(100),
+                telefono VARCHAR(20)
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS productos (
+                id_producto SERIAL PRIMARY KEY,
+                nombre VARCHAR(100) NOT NULL,
+                descripcion TEXT,
+                precio DECIMAL(10,2) NOT NULL,
+                stock INT NOT NULL,
+                id_proveedor INT,
+                id_usuario INT,
+                FOREIGN KEY (id_proveedor)
+                    REFERENCES proveedores(id_proveedor),
+                FOREIGN KEY (id_usuario)
+                    REFERENCES usuarios(id)
+            )
+        """)
+
+        conexion.commit()
+
+        cursor.close()
+        conexion.close()
+
+        print("TABLAS DE POSTGRESQL VERIFICADAS CORRECTAMENTE")
+
+    except Exception as e:
+
+        print("ERROR AL CREAR TABLAS POSTGRESQL:", e)
 
 # =========================
 # CONFIGURACIÓN LOGIN
@@ -766,13 +826,20 @@ def facturacion():
 # EJECUTAR APLICACIÓN
 # =========================
 
+crear_tablas_postgresql()
+
 if __name__ == "__main__":
+
+    crear_tablas_postgresql()
 
     try:
 
         conexion = obtener_conexion()
 
-        print("CONEXIÓN EXITOSA CON MYSQL LOCAL")
+        if os.getenv("DATABASE_URL"):
+            print("CONEXIÓN EXITOSA CON POSTGRESQL")
+        else:
+            print("CONEXIÓN EXITOSA CON MYSQL LOCAL")
 
         conexion.close()
 
