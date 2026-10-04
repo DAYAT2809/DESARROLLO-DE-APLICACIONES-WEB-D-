@@ -26,9 +26,15 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "clave-secreta-girls-2026"
 
+
+# =========================
+# CONFIGURACIÓN LOGIN
+# =========================
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -56,6 +62,7 @@ def load_user(user_id):
 
     return None
 
+
 # =========================
 # REGISTRO DE USUARIOS
 # =========================
@@ -80,7 +87,11 @@ def registro():
         usuario_existente = cursor.fetchone()
 
         if usuario_existente:
-            flash("El nombre de usuario ya existe.", "danger")
+
+            flash(
+                "El nombre de usuario ya existe.",
+                "danger"
+            )
 
             cursor.close()
             conexion.close()
@@ -109,7 +120,10 @@ def registro():
         cursor.close()
         conexion.close()
 
-        flash("Usuario registrado correctamente.", "success")
+        flash(
+            "Usuario registrado correctamente.",
+            "success"
+        )
 
         return redirect(url_for("login"))
 
@@ -117,6 +131,7 @@ def registro():
         "registro.html",
         form=form
     )
+
 
 # =========================
 # LOGIN
@@ -130,7 +145,7 @@ def login():
     if form.validate_on_submit():
 
         conexion = obtener_conexion()
-        cursor = conexion.cursor(dictionary=True)
+        cursor = conexion.cursor()
 
         cursor.execute("""
             SELECT id, usuario, password
@@ -156,16 +171,23 @@ def login():
 
             login_user(usuario_obj)
 
-            flash("Inicio de sesión correcto.", "success")
+            flash(
+                "Inicio de sesión correcto.",
+                "success"
+            )
 
             return redirect(url_for("inicio"))
 
-        flash("Usuario o contraseña incorrectos.", "danger")
+        flash(
+            "Usuario o contraseña incorrectos.",
+            "danger"
+        )
 
     return render_template(
         "login.html",
         form=form
     )
+
 
 # =========================
 # CERRAR SESIÓN
@@ -177,9 +199,13 @@ def logout():
 
     logout_user()
 
-    flash("Sesión cerrada correctamente.", "success")
+    flash(
+        "Sesión cerrada correctamente.",
+        "success"
+    )
 
     return redirect(url_for("login"))
+
 
 # =========================
 # INICIO
@@ -248,21 +274,28 @@ def productos():
                 descripcion,
                 precio,
                 stock,
-                id_proveedor
+                id_proveedor,
+                id_usuario
             )
-            VALUES (%s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s)
         """, (
             form.nombre.data,
             form.descripcion.data,
             form.precio.data,
             form.stock.data,
-            form.proveedor.data
+            form.proveedor.data,
+            current_user.id
         ))
 
         conexion.commit()
 
         cursor.close()
         conexion.close()
+
+        flash(
+            "Producto agregado correctamente.",
+            "success"
+        )
 
         return redirect("/productos")
 
@@ -281,11 +314,17 @@ def productos():
             p.precio,
             p.stock,
             p.id_proveedor,
+            p.id_usuario,
             pr.nombre AS proveedor,
-            pr.empresa
+            pr.empresa,
+            u.usuario AS usuario
         FROM productos p
+
         LEFT JOIN proveedores pr
             ON p.id_proveedor = pr.id_proveedor
+
+        LEFT JOIN usuarios u
+            ON p.id_usuario = u.id
     """)
 
     productos = cursor.fetchall()
@@ -357,6 +396,11 @@ def editar_producto(id):
         cursor.close()
         conexion.close()
 
+        flash(
+            "Producto actualizado correctamente.",
+            "success"
+        )
+
         return redirect("/productos")
 
     # =========================
@@ -370,7 +414,8 @@ def editar_producto(id):
             descripcion,
             precio,
             stock,
-            id_proveedor
+            id_proveedor,
+            id_usuario
         FROM productos
         WHERE id_producto = %s
     """, (id,))
@@ -407,6 +452,11 @@ def eliminar_producto(id):
 
     cursor.close()
     conexion.close()
+
+    flash(
+        "Producto eliminado correctamente.",
+        "success"
+    )
 
     return redirect("/productos")
 
@@ -511,6 +561,11 @@ def proveedores():
         cursor.close()
         conexion.close()
 
+        flash(
+            "Proveedor agregado correctamente.",
+            "success"
+        )
+
         return redirect("/proveedores")
 
     # =========================
@@ -541,6 +596,109 @@ def proveedores():
         form=form
     )
 
+# =========================
+# EDITAR PROVEEDOR
+# =========================
+
+@app.route("/proveedores/editar/<int:id>", methods=["GET", "POST"])
+@login_required
+def editar_proveedor(id):
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor(dictionary=True)
+
+    # =========================
+    # ACTUALIZAR PROVEEDOR
+    # =========================
+
+    if request.method == "POST":
+
+        nombre = request.form["nombre"]
+        empresa = request.form["empresa"]
+        email = request.form["email"]
+        telefono = request.form["telefono"]
+
+        cursor.execute("""
+            UPDATE proveedores
+            SET
+                nombre = %s,
+                empresa = %s,
+                email = %s,
+                telefono = %s
+            WHERE id_proveedor = %s
+        """, (
+            nombre,
+            empresa,
+            email,
+            telefono,
+            id
+        ))
+
+        conexion.commit()
+
+        cursor.close()
+        conexion.close()
+
+        flash(
+            "Proveedor actualizado correctamente.",
+            "success"
+        )
+
+        return redirect(url_for("proveedores"))
+
+    # =========================
+    # BUSCAR PROVEEDOR
+    # =========================
+
+    cursor.execute("""
+        SELECT
+            id_proveedor,
+            nombre,
+            empresa,
+            email,
+            telefono
+        FROM proveedores
+        WHERE id_proveedor = %s
+    """, (id,))
+
+    proveedor = cursor.fetchone()
+
+    cursor.close()
+    conexion.close()
+
+    return render_template(
+        "editar_proveedor.html",
+        proveedor=proveedor
+    )
+
+
+# =========================
+# ELIMINAR PROVEEDOR
+# =========================
+
+@app.route("/proveedores/eliminar/<int:id>", methods=["POST"])
+@login_required
+def eliminar_proveedor(id):
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        DELETE FROM proveedores
+        WHERE id_proveedor = %s
+    """, (id,))
+
+    conexion.commit()
+
+    cursor.close()
+    conexion.close()
+
+    flash(
+        "Proveedor eliminado correctamente.",
+        "success"
+    )
+
+    return redirect(url_for("proveedores"))
 
 # =========================
 # FACTURACIÓN
@@ -614,7 +772,7 @@ if __name__ == "__main__":
 
         conexion = obtener_conexion()
 
-        print("CONEXIÓN EXITOSA CON MYSQL")
+        print("CONEXIÓN EXITOSA CON MYSQL LOCAL")
 
         conexion.close()
 
